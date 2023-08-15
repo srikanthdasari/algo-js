@@ -41,3 +41,47 @@ export const buildQuery = (options: QueryBuilderOptions): DocumentNode => {
     }
   `;
 };
+
+
+let activeSubscriptions = 0;
+
+const onNewMessageSubscription = `
+  subscription OnNewMessage {
+    newMessage {
+      id
+      content
+    }
+  }
+`;
+
+function subscribeToNewMessages() {
+  activeSubscriptions++;
+
+  const unsubscribe = wsClient.subscribe(
+    { query: onNewMessageSubscription },
+    {
+      next: data => {
+        console.log("Received data:", data);
+      },
+      error: err => {
+        console.error("Error from subscription:", err);
+      },
+      complete: () => {
+        console.log("Subscription completed");
+        activeSubscriptions--;
+
+        if (activeSubscriptions === 0) {
+          wsClient.dispose();
+        }
+      },
+    }
+  );
+
+  return unsubscribe;
+}
+
+const unsubscribeFromNewMessages = subscribeToNewMessages();
+
+// Later, when you want to unsubscribe:
+unsubscribeFromNewMessages();
+
