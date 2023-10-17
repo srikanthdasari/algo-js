@@ -1,0 +1,58 @@
+Highcharts.chart('container', {
+    chart: {
+        zoomType: 'xy'
+    },
+    title: {
+        text: 'Dual Axis Chart'
+    },
+    xAxis: [{
+        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        crosshair: true
+    }],
+    yAxis: [{ // Primary yAxis
+        labels: {
+            format: '{value}%',
+            style: {
+                color: Highcharts.getOptions().colors[1]
+            }
+        },
+        title: {
+            text: 'First Dataset',
+            style: {
+                color: Highcharts.getOptions().colors[1]
+            }
+        }
+    }, { // Secondary yAxis
+        title: {
+            text: 'Second Dataset',
+            style: {
+                color: Highcharts.getOptions().colors[0]
+            }
+        },
+        labels: {
+            format: '{value} %',
+            style: {
+                color: Highcharts.getOptions().colors[0]
+            }
+        },
+        opposite: true
+    }],
+    series: [{
+        name: 'Second Dataset',
+        type: 'column',
+        yAxis: 1,
+        data: [/* data */],
+        tooltip: {
+            valueSuffix: ' %'
+        }
+
+    }, {
+        name: 'First Dataset',
+        type: 'spline',
+        data: [/* data */],
+        tooltip: {
+            valueSuffix: ' %'
+        }
+    }]
+});
